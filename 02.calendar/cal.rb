@@ -19,7 +19,7 @@ def get_date #日付を受け取るメソッド
 
     day_last = Date.new(y,m,-1)
     day_first = Date.new(y,m,1)
-    return day_last,day_first
+    [day_last,day_first]
 end
 
 def mk_blank(n) #１日の曜日を合わせるためのメソッド
@@ -29,24 +29,24 @@ end
 def mk_cal(day_last,day_first) #カレンダー作成メソッド
     puts "      #{day_first.mon}月#{day_first.year}"
     puts " 日 月 火 水 木 金 土"
-    case day_first.strftime("%a")
-    when "Mon"
+    case day_first.wday
+    when 1
         mk_blank(1)
-    when "Tue"
+    when 2
         mk_blank(2)
-    when "Wed"
+    when 3
         mk_blank(3)
-    when "Thu"
+    when 4
         mk_blank(4)
-    when "Fri"
+    when 5
         mk_blank(5)
-    when "Sat"  
+    when 6  
         mk_blank(6)
     end 
 
     (day_first..day_last).each do |day|
       print sprintf(" %2d",day.day)
-        if day.strftime("%a") == "Sat"
+        if day.saturday?
             puts ""
         end
     end
