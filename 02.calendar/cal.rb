@@ -9,22 +9,10 @@ def get_date #日付を受け取るメソッド
     opt.on("-m [VAL]"){|v| date[:m] = v}
     opt.parse(ARGV)
     #dateが入力されているかの確認
-    if date[:y].nil? && date[:m].nil?
-        y = Date.today.year
-        m = Date.today.month
-    elsif date[:y].nil?
-        y = Date.today.year
-        m = date[:m].to_i
-    elsif date[:m].nil?  
-        y = date[:y].to_i
-        m = Date.today.month
-    else
-        y = date[:y].to_i
-        m = date[:m].to_i
-    end
-
-    day_last = Date.new(y,m,-1)
-    day_first = Date.new(y,m,1)
+    date[:y] = Date.today.year if date[:y].nil?   
+    date[:m] = Date.today.month if date[:m].nil?
+    day_last = Date.new(date[:y].to_i,date[:m].to_i,-1)
+    day_first = Date.new(date[:y].to_i,date[:m].to_i,1)
     [day_last,day_first]
 end
 
