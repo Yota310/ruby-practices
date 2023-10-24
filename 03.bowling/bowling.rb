@@ -12,30 +12,31 @@ def gets_score
       shots << s.to_i
     end
   end
-    frames = []
-    shots.each_slice(2) do |s|
-      frames << s
-    end
-    frames
+  frames = []
+  shots.each_slice(2) do |s|
+    frames << s
+  end
+  frames
 end
 
 def judge(frame)
   # strike
   if frame[0] == 10
-    flag = 1 
+    flag = 1
   # spare
   elsif frame.sum == 10
-    flag = 2 
+    flag = 2
   end
+  flag
 end
 
 def cal_strike(frames, num, point)
   flag = judge(frames[num + 1])
-  if flag == 1
-    point += 20 + frames[num + 2][0]
-  else
-    point += 10 + frames[num + 1].sum
-  end
+  point += if flag == 1
+             20 + frames[num + 2][0]
+           else
+             10 + frames[num + 1].sum
+           end
   point
 end
 
