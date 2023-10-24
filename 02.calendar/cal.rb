@@ -2,15 +2,15 @@
 require "optparse"
 require "date"
 def get_date #日付を受け取るメソッド
+    date = {} #-y,-mの値を保存する用のハッシュ
+    date[:y] = Date.today.year  
+    date[:m] = Date.today.month
     #オプション(-y,-m)の定義
     opt = OptionParser.new
-    date = {} #-y,-mの値を保存する用のハッシュ
     opt.on("-y [VAL]"){|v| date[:y] = v}
     opt.on("-m [VAL]"){|v| date[:m] = v}
     opt.parse(ARGV)
-    #dateが入力されているかの確認
-    date[:y] = Date.today.year if date[:y].nil?   
-    date[:m] = Date.today.month if date[:m].nil?
+    #初日と最終日を取得
     day_last = Date.new(date[:y].to_i,date[:m].to_i,-1)
     day_first = Date.new(date[:y].to_i,date[:m].to_i,1)
     [day_last,day_first]
