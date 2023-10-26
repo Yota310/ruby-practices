@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+$strike = 1
+$spare = 2
+$all_pin = 10 #strikeとspareの判定用
+
 def gets_score
   score = ARGV[0]
   scores = score.split(',')
@@ -13,26 +17,21 @@ def gets_score
     end
   end
   frames = []
-  shots.each_slice(2) do |s|
-    frames << s
-  end
+  frames = shots.each_slice(2).to_a
   frames
 end
 
 def judge(frame)
-  # strike
-  if frame[0] == 10
-    flag = 1
-  # spare
-  elsif frame.sum == 10
-    flag = 2
+  if frame[0] == $all_pin  # strike
+    return $strike
+  elsif frame.sum == $all_pin  # spare
+    return $spare
   end
-  flag
 end
 
-def cal_strike(frames, num, point)
+def cal_strike(frames, num)
   flag = judge(frames[num + 1])
-  point += if flag == 1
+  point = if flag == $strike
              20 + frames[num + 2][0]
            else
              10 + frames[num + 1].sum
@@ -42,15 +41,14 @@ end
 
 def cal_score(frames)
   point = 0
-  flag = 0
   frames.each_with_index do |frame, num|
     flag = judge(frame)
     if num >= 9
       point += frame.sum
-    elsif flag == 1
-      point = cal_strike(frames, num, point)
+    elsif flag == $strike
+      point += cal_strike(frames, num)
       flag = 0
-    elsif flag == 2
+    elsif flag == $spare
       point += frame.sum + frames[num + 1][0]
       flag = 0
     else
