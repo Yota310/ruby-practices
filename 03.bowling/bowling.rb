@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
-$strike = 1
-$spare = 2
-$all_pin = 10 #strikeとspareの判定用
+class Bowling
+  STRIKE = 1
+  SPARE = 2
+  ALL_PIN = 10 #strikeとspareの判定用
+end
 
 def gets_score
   score = ARGV[0]
@@ -16,22 +18,20 @@ def gets_score
       shots << s.to_i
     end
   end
-  frames = []
-  frames = shots.each_slice(2).to_a
-  frames
+  shots.each_slice(2).to_a
 end
 
 def judge(frame)
-  if frame[0] == $all_pin  # strike
-    return $strike
-  elsif frame.sum == $all_pin  # spare
-    return $spare
+  if frame[0] == Bowling::ALL_PIN # strike
+    return Bowling::STRIKE
+  elsif frame.sum == Bowling::ALL_PIN  # spare
+    return Bowling::SPARE
   end
 end
 
 def cal_strike(frames, num)
   flag = judge(frames[num + 1])
-  point = if flag == $strike
+  point = if flag == Bowling::STRIKE
              20 + frames[num + 2][0]
            else
              10 + frames[num + 1].sum
@@ -45,12 +45,10 @@ def cal_score(frames)
     flag = judge(frame)
     if num >= 9
       point += frame.sum
-    elsif flag == $strike
+    elsif flag == Bowling::STRIKE
       point += cal_strike(frames, num)
-      flag = 0
-    elsif flag == $spare
+    elsif flag == Bowling::SPARE
       point += frame.sum + frames[num + 1][0]
-      flag = 0
     else
       point += frame.sum
     end
@@ -59,3 +57,4 @@ def cal_score(frames)
 end
 frames = gets_score
 cal_score(frames)
+
