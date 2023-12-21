@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-MAX_COL = 3  # 出力時の列の最大数
+MAX_COL = 3 # 出力時の列の最大数
 
 def get_files(files)
   Dir.glob('./*').each do |path|
@@ -12,20 +12,17 @@ end
 def setup_files(files)
   maxsize = 0
   row = files.size / MAX_COL + 1
-  output = Array.new(row).map { Array.new(MAX_COL) }
-  i = 0
-  files.each_with_index do |file, index|
-    num = index % row # 配列の添字に対応させるための計算
-    i += 1 if num.zero? && index != 0
-    output[num][i] = file
+  output = files.each_slice(row).to_a
+  output.map! { |data| data.values_at(0...row) }
+  files.each do |file|
     maxsize = file.size if maxsize < file.size
   end
-  [output,maxsize]
+  [output.transpose, maxsize]
 end
 
-def output_files(output,maxsize)
-  output.each do |output|
-    output.each do |name|
+def output_files(output, maxsize)
+  output.each do |data|
+    data.each do |name|
       print format("%-#{maxsize + 1}s", name)
     end
     puts
@@ -35,5 +32,5 @@ end
 files = []
 
 get_files(files)
-output,maxsize = setup_files(files)
-output_files(output,maxsize)
+output, maxsize = setup_files(files)
+output_files(output, maxsize)
