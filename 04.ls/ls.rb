@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+MAX_COL = 3  # 出力時の列の最大数
+
 def get_files(files)
   Dir.glob('./*').each do |path|
     files.push(File.basename(path)) if File.file?(path) # ファイル名を出力
@@ -8,10 +10,9 @@ def get_files(files)
 end
 
 def setup_files(files)
-  max_col = 3
   maxsize = 0
-  row = files.size / max_col + 1
-  output = Array.new(row).map { Array.new(max_col) }
+  row = files.size / MAX_COL + 1
+  output = Array.new(row).map { Array.new(MAX_COL) }
   i = 0
   files.each_with_index do |file, index|
     num = index % row # 配列の添字に対応させるための計算
