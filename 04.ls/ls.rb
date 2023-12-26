@@ -4,9 +4,13 @@
 MAX_COL = 3 # 出力時の列の最大数
 
 def get_files(files)
-  puts Dir.pwd
   Dir.glob('./*').each do |path|
-    files.push(File.basename(path)) if File.file?(path) # ファイル名を出力
+    if File.file?(path) # ファイル名を出力
+      files.push(File.basename(path))
+    else
+      path.split
+      files.push(path[2..])
+    end
   end
 end
 
