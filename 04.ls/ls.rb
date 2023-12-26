@@ -10,17 +10,16 @@ def get_files(files)
     else
       path.split
       files.push(path[2..])
-    end 
+    end
   end
   files
 end
 
 def setup_files(files)
-  maxsize = 0
   row = files.size / MAX_COL + 1
   output = files.each_slice(row).to_a
   output.map! { |data| data.values_at(0...row) }
-  maxsize = files.max_by { |file| file.length }.length
+  maxsize = files.max_by(&:length).length
   puts maxsize
   [output.transpose, maxsize]
 end
