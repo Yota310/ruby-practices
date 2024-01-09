@@ -10,7 +10,7 @@ def option(files)
 
   opt.on('-a') do
     Dir.glob('./.*').each do |path|
-      files.push(File.basename(path)) if File.file?(path) # ドット付きのファイル名を出力
+      files.push(File.basename(path)) # ドット付きのファイル名を出力
     end
   end
   opt.parse!(ARGV)
