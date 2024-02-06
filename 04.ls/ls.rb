@@ -9,7 +9,7 @@ def option(files)
   opt = OptionParser.new
 
   opt.on('-r') do
-   files.reverse!
+    files.reverse!
   end
   opt.parse!(ARGV)
   files
