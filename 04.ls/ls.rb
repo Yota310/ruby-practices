@@ -8,17 +8,14 @@ MAX_COL = 3 # 出力時の列の最大数
 def option(files)
   opt = OptionParser.new
 
-  opt.on('-a') do
-    Dir.glob('./.*').each do |path|
-      files.push(File.basename(path)) if File.file?(path) # ドット付きのファイル名を出力
-    end
+  opt.on('-r') do
+    files.reverse!
   end
   opt.parse!(ARGV)
   files
 end
 
 def get_files(files)
-  files = option(files)
   Dir.glob('./*').each do |path|
     if File.file?(path) # ファイル名を出力
       files.push(File.basename(path))
@@ -31,6 +28,7 @@ def get_files(files)
 end
 
 def setup_files(files)
+  files = option(files)
   row = files.size / MAX_COL + 1
   output = files.each_slice(row).to_a
   output.map! { |data| data.values_at(0...row) }
