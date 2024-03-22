@@ -14,70 +14,51 @@ def option
   params
 end
 
-def check_file_type(type)
+def print_file_type(type)
   authority = []
   types = type.split('')
   file_type = types[0].to_s + types[1].to_s
   special_authority = types[2]
   authority.push(types[3], types[4], types[5])
-  convert_file_type(file_type)
-  convert_special_authority(special_authority)
-  convert_authority(authority)
+  print convert_file_type(file_type)
+  print convert_special_authority(special_authority)
+  print convert_authority(authority)
 end
 
 def convert_file_type(file_type)
-  case file_type
-  when '01'
-    print 'p'
-  when '02'
-    print 'c'
-  when '04'
-    print 'd'
-  when '06'
-    print 'b'
-  when '10'
-    print '-'
-  when '12'
-    print 'l'
-  when '14'
-    print 's'
-  end
+  {
+    '01' => 'p',
+    '02' => 'c',
+    '04' => 'd',
+    '06' => 'b',
+    '10' => '-',
+    '12' => 'l',
+    '14' => 's'
+  }[file_type]
 end
 
 def convert_special_authority(special_authority)
-  case special_authority # 特殊権限
-  when '0'
-    print ''
-  when '1'
-    print 't'
-  when '2'
-    print 's'
-  when '4'
-    print 's'
-  end
+  {
+    '0' => '',
+    '1' => 't',
+    '2' => 's',
+    '4' => 's'
+  }[special_authority]
 end
 
 def convert_authority(authority)
-  authority.each do |auth|
-    case auth
-    when '0'
-      print '---'
-    when '1'
-      print '--x'
-    when '2'
-      print '-w-'
-    when '3'
-      print '-wx'
-    when '4'
-      print 'r--'
-    when '5'
-      print 'r-x'
-    when '6'
-      print 'rw-'
-    when '7'
-      print 'rwx'
-    end
-  end
+  authority.map do |auth|
+    {
+      '0' => '---',
+      '1' => '--x',
+      '2' => '-w-',
+      '3' => '-wx',
+      '4' => 'r--',
+      '5' => 'r-x',
+      '6' => 'rw-',
+      '7' => 'rwx'
+    }[auth]
+  end.join
 end
 
 def get_files(files)
@@ -102,14 +83,8 @@ def setup_files(files)
 end
 
 def get_max_total(files)
-  max = 0
-  total = 0
-  files.each do |file|
-    data = File.stat(file)
-    size = data.size.to_s.length
-    max = size if size > max
-    total += data.blocks
-  end
+  total = files.map { |file| File.stat(file).blocks }.sum
+  max = files.map { |file| File.stat(file).size.to_s.length }.max
   [max, total]
 end
 
@@ -119,7 +94,7 @@ def output_l(files)
   files.each do |file|
     data = File.stat(file)
     type = format('%06d', data.mode.to_s(8))
-    check_file_type(type)
+    print_file_type(type)
     print "  #{data.nlink}"
     print " #{Etc.getpwuid(data.uid).name}"
     print "  #{Etc.getgrgid(data.gid).name}"
