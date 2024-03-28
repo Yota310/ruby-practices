@@ -10,6 +10,8 @@ def option
   opt = OptionParser.new
   params = {}
   opt.on('-l') { |v| params[:l] = v }
+  opt.on('-a') { |v| params[:a] = v }
+  opt.on('-r') { |v| params[:r] = v }
   opt.parse(ARGV)
   params
 end
