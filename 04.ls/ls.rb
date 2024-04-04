@@ -63,7 +63,7 @@ def convert_authority(authority)
   end.join
 end
 
-def get_hide_file(files)
+def get_hidden_file(files)
   Dir.glob('./.*').each do |path|
     path.split
     files.push(path[2..]) # ドット付きのファイル名を出力
@@ -73,7 +73,7 @@ end
 
 def get_files(files)
   params = option
-  files = get_hide_file(files) if params[:a] == true
+  files = get_hidden_file(files) if params[:a] == true
   Dir.glob('./*').each do |path|
     if File.file?(path) # ファイル名を出力
       files.push(File.basename(path))
