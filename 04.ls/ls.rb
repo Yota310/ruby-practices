@@ -71,10 +71,6 @@ def get_hide_file(files)
   files
 end
 
-def reverse_files(files)
-  files.reverse!
-end
-
 def get_files(files)
   params = option
   files = get_hide_file(files) if params[:a] == true
@@ -90,7 +86,7 @@ def get_files(files)
 end
 
 def setup_files(files, params)
-  files = reverse_files(files) if params[:r] == true
+  files.reverse! if params[:r] == true
   row = files.size / MAX_COL + 1
   output = files.each_slice(row).to_a
   output.map! { |data| data.values_at(0...row) }
