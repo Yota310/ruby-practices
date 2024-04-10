@@ -10,6 +10,8 @@ def option
   opt = OptionParser.new
   params = {}
   opt.on('-l') { |v| params[:l] = v }
+  opt.on('-a') { |v| params[:a] = v }
+  opt.on('-r') { |v| params[:r] = v }
   opt.parse(ARGV)
   params
 end
@@ -61,8 +63,17 @@ def convert_authority(authority)
   end.join
 end
 
+def get_hidden_file(files)
+  Dir.glob('./.*').each do |path|
+    path.split
+    files.push(path[2..]) # ドット付きのファイル名を出力
+  end
+  files
+end
+
 def get_files(files)
   params = option
+  files = get_hidden_file(files) if params[:a] == true
   Dir.glob('./*').each do |path|
     if File.file?(path) # ファイル名を出力
       files.push(File.basename(path))
@@ -74,7 +85,8 @@ def get_files(files)
   [files, params]
 end
 
-def setup_files(files)
+def setup_files(files, params)
+  files.reverse! if params[:r] == true
   row = files.size / MAX_COL + 1
   output = files.each_slice(row).to_a
   output.map! { |data| data.values_at(0...row) }
@@ -121,5 +133,5 @@ end
 files = []
 
 files, params = get_files(files)
-output, maxsize, files = setup_files(files)
+output, maxsize, files = setup_files(files, params)
 output_files(output, maxsize, params, files)
