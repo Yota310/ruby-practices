@@ -18,23 +18,12 @@ def set_up_import_files
   if !filenames.empty?
     filenames.each do |filename|
       File.open(filename, 'r') do |f|
-        array_files.push(
-          {
-            name: filename,
-            content: f.read,
-            size: f.size
-          }
-        )
+        array_files.push({ name: filename, content: f.read, size: f.size })
       end
     end
   else
     file = $stdin.read
-    hash_files.push(
-      {
-        content: file,
-        size: file.bytesize
-      }
-    )
+    hash_files.push({ content: file, size: file.bytesize })
   end
   array_files
 end
