@@ -13,12 +13,12 @@ def judge_option_state
 end
 
 def set_up_import_files
-  array_files = []
+  # array_files = []
   filenames = Dir.glob(ARGV)
   if !filenames.empty?
-    filenames.each do |filename|
+    array_files = filenames.map do |filename|
       File.open(filename, 'r') do |f|
-        array_files.push({ name: filename, content: f.read, size: f.size })
+        { name: filename, content: f.read, size: f.size }
       end
     end
   else
