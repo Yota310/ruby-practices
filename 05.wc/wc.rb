@@ -14,25 +14,29 @@ end
 
 def set_up_import_files
   array_files = []
-  filename_array = Dir.glob(ARGV)
-  if !filename_array.empty?
-    filename_array.each do |argv|
-      File.open(argv, 'r') do |f|
-        name = argv
-        argv = {}
-        argv[:name] = name
-        argv[:content] = f.read
-        argv[:size] = f.size
-        array_files.push(argv)
+  filenames = Dir.glob(ARGV)
+  if !filenames.empty?
+    filenames.each do |filename|
+      File.open(filename, 'r') do |f|
+        array_files.push(
+          {
+            name: filename,
+            content: f.read,
+            size: f.size
+          }
+        )
       end
     end
   else
     file = $stdin.read
-    hash_file[:content] = file
-    hash_file[:size] = file.bytesize
-    hash_files.push(hash_file)
+    hash_files.push(
+      {
+        content: file,
+        size: file.bytesize
+      }
+    )
   end
-  [array_files, filename_array]
+  array_files
 end
 
 def set_up_result(size, file, filename)
@@ -44,7 +48,7 @@ def set_up_result(size, file, filename)
   result
 end
 
-def set_up_total_num(results, _option_state, _filename_array, total)
+def set_up_total_num(results, _option_state, total)
   total[:l] = results.sum { |result| result[:l] }
   total[:w] = results.sum { |result| result[:w] }
   total[:c] = results.sum { |result| result[:c] }
@@ -52,11 +56,11 @@ def set_up_total_num(results, _option_state, _filename_array, total)
   total
 end
 
-def output_results(result, option_state)
-  result.delete(:l) if option_state[:l].nil? && !option_state.empty?
-  result.delete(:w) if option_state[:w].nil? && !option_state.empty?
-  result.delete(:c) if option_state[:c].nil? && !option_state.empty?
-  result.each_value do |output|
+def output_results(result_hash, option_state)
+  result_hash.delete(:l) if option_state[:l].nil? && !option_state.empty?
+  result_hash.delete(:w) if option_state[:w].nil? && !option_state.empty?
+  result_hash.delete(:c) if option_state[:c].nil? && !option_state.empty?
+  result_hash.each_value do |output|
     print format('%8s', output)
   end
   puts
@@ -66,11 +70,11 @@ def main
   results = []
   total = {}
   option_state = judge_option_state
-  array_files, argv_array = set_up_import_files
+  array_files = set_up_import_files
   array_files.each do |file|
     results.push(set_up_result(file[:size], file[:content], file[:name]))
   end
-  total = set_up_total_num(results, option_state, argv_array, total)
+  total = set_up_total_num(results, option_state, total)
   results.push(total) if results.size > 1
   results.each do |result|
     output_results(result, option_state)
