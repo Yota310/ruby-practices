@@ -13,19 +13,19 @@ def judge_option_state
 end
 
 def set_up_import_files
-  # array_files = []
   filenames = Dir.glob(ARGV)
   if !filenames.empty?
-    array_files = filenames.map do |filename|
+    data_array = filenames.map do |filename|
       File.open(filename, 'r') do |f|
-        { name: filename, content: f.read, size: f.size }
+        { name: filename, size: f.size, content: f.read }
       end
     end
   else
-    file = $stdin.read
-    hash_files.push({ content: file, size: file.bytesize })
+    data_array = []
+    data = $stdin.read
+    data_array.push({ content: data, size: data.bytesize, name: '' })
   end
-  array_files
+  data_array
 end
 
 def set_up_result(size, file, filename)
@@ -37,7 +37,7 @@ def set_up_result(size, file, filename)
   result
 end
 
-def set_up_total_num(results, _option_state, total)
+def set_up_total_num(results, total)
   total[:l] = results.sum { |result| result[:l] }
   total[:w] = results.sum { |result| result[:w] }
   total[:c] = results.sum { |result| result[:c] }
@@ -59,12 +59,14 @@ def main
   results = []
   total = {}
   option_state = judge_option_state
-  array_files = set_up_import_files
-  array_files.each do |file|
-    results.push(set_up_result(file[:size], file[:content], file[:name]))
+  data_array = set_up_import_files
+  data_array.each do |data|
+    results.push(set_up_result(data[:size], data[:content], data[:name]))
   end
-  total = set_up_total_num(results, option_state, total)
-  results.push(total) if results.size > 1
+  if results.size > 1
+    total = set_up_total_num(results, total)
+    results.push(total)
+  end
   results.each do |result|
     output_results(result, option_state)
   end
