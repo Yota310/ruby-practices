@@ -12,20 +12,18 @@ def judge_option_state
   option_state
 end
 
-def set_up_import_files
+def import_files_data
   filenames = Dir.glob(ARGV)
   if !filenames.empty?
-    data_array = filenames.map do |filename|
+    filenames.map do |filename|
       File.open(filename, 'r') do |f|
         { name: filename, size: f.size, content: f.read }
       end
     end
   else
-    data_array = []
     data = $stdin.read
-    data_array.push({ content: data, size: data.bytesize, name: '' })
+[{ content: data, size: data.bytesize, name: '' }]
   end
-  data_array
 end
 
 def set_up_result(size, file, filename)
@@ -59,8 +57,7 @@ def main
   results = []
   total = {}
   option_state = judge_option_state
-  data_array = set_up_import_files
-  data_array.each do |data|
+  import_files_data.each do |data|
     results.push(set_up_result(data[:size], data[:content], data[:name]))
   end
   if results.size > 1
