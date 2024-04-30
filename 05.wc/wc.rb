@@ -21,8 +21,8 @@ def import_files_data
       end
     end
   else
-    data = $stdin.read
-[{ content: data, size: data.bytesize, name: '' }]
+    content = $stdin.read
+    [{ content: content, size: content.bytesize, name: '' }]
   end
 end
 
