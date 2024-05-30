@@ -8,7 +8,7 @@ class Game
     @frames = []
     @shots = shots
     @game_result = 0
-    frames = set_frames
+    frames = insert_zero_for_strikes
     frames.each do |frame|
       @frames.push(Frame.new(frame[0], frame[1]))
     end
@@ -39,7 +39,7 @@ class Game
     @game_result += frame.score + @frames[index + 1].first_shot.score
   end
 
-  def set_frames
+  def insert_zero_for_strikes
     @shots.each_with_index do |shot, index|
       @shots.insert(index + 1, 0) if shot == 'X'
     end
