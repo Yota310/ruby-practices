@@ -6,4 +6,4 @@ shots = ARGV[0].split(',')
 
 game = Game.new(shots)
 
-game.score
+puts game.score

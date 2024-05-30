@@ -24,7 +24,7 @@ class Game
         @game_result += frame.score
       end
     end
-    puts @game_result
+    @game_result
   end
 
   def strike(frame, index)
