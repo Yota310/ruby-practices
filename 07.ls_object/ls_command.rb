@@ -5,7 +5,7 @@ require 'etc'
 
 require_relative 'file_info'
 class LsCommand
-  MAX_COL = 6 # 出力時の列の最大数
+  MAX_COL = 3 # 出力時の列の最大数
 
   def initialize
     @files = []
