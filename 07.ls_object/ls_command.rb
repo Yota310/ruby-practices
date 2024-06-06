@@ -3,7 +3,7 @@
 require 'optparse'
 require 'etc'
 
-require_relative 'fileinfo'
+require_relative 'file_info'
 class LsCommand
   MAX_COL = 6 # 出力時の列の最大数
 
