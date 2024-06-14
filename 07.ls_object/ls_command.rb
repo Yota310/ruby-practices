@@ -11,7 +11,7 @@ class LsCommand
   def initialize(argv)
     @files = []
     @argv = argv
-    @params = option
+    @params = set_params
   end
 
   def self.run
@@ -21,7 +21,7 @@ class LsCommand
     output_files(ls)
   end
 
-  def option
+  def set_params
     opt = OptionParser.new
     params = {}
     opt.on('-l') { |v| params[:l] = v }
