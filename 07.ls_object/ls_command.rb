@@ -8,9 +8,17 @@ require_relative 'file_info'
 class LsCommand
   MAX_COL = 3
 
-  def initialize
+  def initialize(argv)
     @files = []
+    @argv = argv
     @params = option
+  end
+
+  def self.run
+    ls = LsCommand.new(ARGV)
+    input_files(ls)
+    setup_files(ls)
+    output_files(ls)
   end
 
   def option
@@ -19,7 +27,7 @@ class LsCommand
     opt.on('-l') { |v| params[:l] = v }
     opt.on('-a') { |v| params[:a] = v }
     opt.on('-r') { |v| params[:r] = v }
-    opt.parse(ARGV)
+    opt.parse(@argv)
     params
   end
 
@@ -68,9 +76,8 @@ class LsCommand
       end
     end
   end
-
   def self.run
-    ls = LsCommand.new
+    ls = LsCommand.new(ARGV)
     ls.input_files
     ls.setup_files
     ls.output_files
