@@ -31,7 +31,7 @@ class LsCommand
   end
 
   def input_files
-    hidden_file if @params[:a] == true
+    hidden_file if @params[:a]
     Dir.glob('./*').each do |path|
       if File.file?(path) # ファイル名を出力
         @files.push(File.basename(path))
@@ -43,7 +43,7 @@ class LsCommand
   end
 
   def setup_files
-    @files.reverse! if @params[:r] == true
+    @files.reverse! if @params[:r]
     row = @files.size / MAX_COL + 1
     @output = @files.each_slice(row).to_a
     @output.map! { |data| data.values_at(0...row) }
@@ -51,7 +51,7 @@ class LsCommand
   end
 
   def output_files
-    if @params[:l] == true
+    if @params[:l]
       total = @files.map { |file| File.stat(file).blocks }.sum
       max = @files.map { |file| File.stat(file).size.to_s.length }.max
       puts "total #{total}"
