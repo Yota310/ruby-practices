@@ -6,7 +6,7 @@ require 'etc'
 
 require_relative 'file_info'
 class LsCommand
-  MAX_COL = 3 # 出力時の列の最大数
+  MAX_COL = 3
 
   def initialize
     @files = []
@@ -26,14 +26,14 @@ class LsCommand
   def hidden_file
     Dir.glob('./.*').each do |path|
       path.split
-      @files.push(path[2..]) # ドット付きのファイル名を出力
+      @files.push(path[2..])
     end
   end
 
   def input_files
     hidden_file if @params[:a]
     Dir.glob('./*').each do |path|
-      if File.file?(path) # ファイル名を出力
+      if File.file?(path)
         @files.push(File.basename(path))
       else
         path.split
