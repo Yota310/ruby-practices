@@ -14,12 +14,13 @@ class LsCommand
     @params = set_params
   end
 
-  def self.run
-    ls = LsCommand.new(ARGV)
-    input_files(ls)
-    setup_files(ls)
-    output_files(ls)
+  def run
+    input_files
+    setup_files
+    output_files
   end
+
+private
 
   def set_params
     opt = OptionParser.new
@@ -76,12 +77,6 @@ class LsCommand
       end
     end
   end
-  def self.run
-    ls = LsCommand.new(ARGV)
-    ls.input_files
-    ls.setup_files
-    ls.output_files
-  end
 end
 
-LsCommand.run
+LsCommand.new(ARGV).run
