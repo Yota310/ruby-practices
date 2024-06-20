@@ -16,7 +16,7 @@ class FileInfo
     types = @type.split('')
     file_type = types[0].to_s + types[1].to_s
     special_authority = types[2]
-    authorities.push(types[3], types[4], types[5])
+    authorities = [types[3], types[4], types[5]]
     print convert_file_type(file_type)
     print convert_special_authority(special_authority)
     print convert_authority(authorities)
