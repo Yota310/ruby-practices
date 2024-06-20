@@ -14,9 +14,9 @@ class LsCommand
   end
 
   def run
-    outputs = setup_outputs
+    output_files = setup_output_files
     maxsize = get_maxsize
-    output_files(outputs, maxsize)
+    output_files(output_files, maxsize)
   end
 
   private
@@ -54,7 +54,7 @@ class LsCommand
     maxsize = @files.max_by(&:length).length
   end
 
-  def setup_outputs
+  def setup_output_files
     @files.reverse! if @params[:r]
     row = @files.size / MAX_COL + 1
     outputs = @files.each_slice(row).to_a
@@ -62,7 +62,7 @@ class LsCommand
     outputs
   end
 
-  def output_files(outputs, maxsize)
+  def output_files(output_files, maxsize)
     if @params[:l]
       total = @files.map { |file| File.stat(file).blocks }.sum
       max = @files.map { |file| File.stat(file).size.to_s.length }.max
@@ -72,9 +72,9 @@ class LsCommand
         file_info.output_l(max)
       end
     else
-      outputs.transpose.each do |output|
-        output.each do |name|
-          print format("%-#{maxsize + 3}s", name)
+      output_files.transpose.each do |output_file|
+        output_file.each do |file|
+          print format("%-#{maxsize + 3}s", file)
         end
         puts
       end
