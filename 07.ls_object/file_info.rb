@@ -13,14 +13,13 @@ class FileInfo
   end
 
   def print_file_type
-    authority = []
     types = @type.split('')
     file_type = types[0].to_s + types[1].to_s
     special_authority = types[2]
-    authority.push(types[3], types[4], types[5])
+    authorities.push(types[3], types[4], types[5])
     print convert_file_type(file_type)
     print convert_special_authority(special_authority)
-    print convert_authority(authority)
+    print convert_authority(authorities)
   end
 
   def convert_file_type(file_type)
@@ -44,8 +43,8 @@ class FileInfo
     }[special_authority]
   end
 
-  def convert_authority(authority)
-    authority.map do |auth|
+  def convert_authority(authorities)
+    authorities.map do |auth|
       {
         '0' => '---',
         '1' => '--x',
