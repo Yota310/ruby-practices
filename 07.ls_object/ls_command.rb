@@ -15,7 +15,7 @@ class LsCommand
 
   def run
     output_files = setup_output_files
-    maxsize = get_maxsize
+    maxsize = culc_maxsize
     output_files(output_files, maxsize)
   end
 
@@ -50,8 +50,8 @@ class LsCommand
     files
   end
 
-  def get_maxsize
-    maxsize = @files.max_by(&:length).length
+  def cul_maxsize
+    @files.max_by(&:length).length
   end
 
   def setup_output_files
