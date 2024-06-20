@@ -68,8 +68,8 @@ class LsCommand
       max = @files.map { |file| File.stat(file).size.to_s.length }.max
       puts "total #{total}"
       @files.each do |file|
-        output = FileInfo.new(file)
-        output.output_l(max)
+        file_info = FileInfo.new(file)
+        file_info.output_l(max)
       end
     else
       outputs.transpose.each do |output|
