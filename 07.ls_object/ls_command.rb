@@ -9,7 +9,7 @@ class LsCommand
   MAX_COL = 3
 
   def initialize(argv)
-    @params = set_params(argv)
+    @params = get_params(argv)
   end
 
   def run
@@ -21,7 +21,7 @@ class LsCommand
 
 private
 
-  def set_params(argv)
+  def get_params(argv)
     opt = OptionParser.new
     params = {}
     opt.on('-l') { |v| params[:l] = v }
