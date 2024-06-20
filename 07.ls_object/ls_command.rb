@@ -10,13 +10,13 @@ class LsCommand
 
   def initialize(argv)
     @params = get_params(argv)
+    @files = input_files
   end
 
   def run
-    files = input_files
-    outputs = setup_outputs(files)
-    maxsize = get_maxsize(files)
-    output_files(files, outputs, maxsize)
+    outputs = setup_outputs
+    maxsize = get_maxsize
+    output_files(outputs, maxsize)
   end
 
   private
@@ -50,24 +50,24 @@ class LsCommand
     files
   end
 
-  def get_maxsize(files)
-    maxsize = files.max_by(&:length).length
+  def get_maxsize
+    maxsize = @files.max_by(&:length).length
   end
 
-  def setup_outputs(files)
-    files.reverse! if @params[:r]
-    row = files.size / MAX_COL + 1
-    outputs = files.each_slice(row).to_a
-    outputs.map! { |data| data.values_at(0...row) }
+  def setup_outputs
+    @files.reverse! if @params[:r]
+    row = @files.size / MAX_COL + 1
+    outputs = @files.each_slice(row).to_a
+    outputs.map! { |output| output.values_at(0...row) }
     outputs
   end
 
-  def output_files(files, outputs, maxsize)
+  def output_files(outputs, maxsize)
     if @params[:l]
-      total = files.map { |file| File.stat(file).blocks }.sum
-      max = files.map { |file| File.stat(file).size.to_s.length }.max
+      total = @files.map { |file| File.stat(file).blocks }.sum
+      max = @files.map { |file| File.stat(file).size.to_s.length }.max
       puts "total #{total}"
-      files.each do |file|
+      @files.each do |file|
         output = FileInfo.new(file)
         output.output_l(max)
       end
