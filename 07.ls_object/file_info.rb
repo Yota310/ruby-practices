@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class FileInfo
-  def initialize(file)
-    data = File.stat(file)
-    @name = file
-    @size = data.size
-    @user_id = Etc.getpwuid(data.uid).name
-    @group_id = Etc.getgrgid(data.gid).name
-    @type = format('%06d', data.mode.to_s(8))
-    @date = data.mtime.strftime('%0m %0d %H:%M')
-    @nlink = data.nlink
+  def initialize(file_name)
+    file_stat = File.stat(file_name)
+    @name = file_name
+    @size = file_stat.size
+    @user_id = Etc.getpwuid(file_stat.uid).name
+    @group_id = Etc.getgrgid(file_stat.gid).name
+    @type = format('%06d', file_stat.mode.to_s(8))
+    @date = file_stat.mtime.strftime('%0m %0d %H:%M')
+    @nlink = file_stat.nlink
   end
 
   def print_file_type
