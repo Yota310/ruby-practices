@@ -13,13 +13,13 @@ class LsCommand
   end
 
   def run
-    files = []
-    files = input_files(files)
-    output, maxsize = setup_files(files)
-    output_files(files, output, maxsize)
+    files = input_files
+    outputs = setup_outputs(files)
+    maxsize = get_maxsize(files)
+    output_files(files, outputs, maxsize)
   end
 
-private
+  private
 
   def get_params(argv)
     opt = OptionParser.new
@@ -31,15 +31,14 @@ private
     params
   end
 
-  def hidden_file(files)
-    Dir.glob('./.*').each do |path|
-      path.split
-      files.push(path[2..])
+  def input_files
+    files = []
+    if @params[:a]
+      Dir.glob('./.*').each do |path|
+        path.split
+        files.push(path[2..])
+      end
     end
-  end
-
-  def input_files(files)
-    hidden_file(files) if @params[:a]
     Dir.glob('./*').each do |path|
       if File.file?(path)
         files.push(File.basename(path))
@@ -51,16 +50,19 @@ private
     files
   end
 
-  def setup_files(files)
-    files.reverse! if @params[:r]
-    row = files.size / MAX_COL + 1
-    output = files.each_slice(row).to_a
-    output.map! { |data| data.values_at(0...row) }
+  def get_maxsize(files)
     maxsize = files.max_by(&:length).length
-    [output,maxsize]
   end
 
-  def output_files(files, output, maxsize)
+  def setup_outputs(files)
+    files.reverse! if @params[:r]
+    row = files.size / MAX_COL + 1
+    outputs = files.each_slice(row).to_a
+    outputs.map! { |data| data.values_at(0...row) }
+    outputs
+  end
+
+  def output_files(files, outputs, maxsize)
     if @params[:l]
       total = files.map { |file| File.stat(file).blocks }.sum
       max = files.map { |file| File.stat(file).size.to_s.length }.max
@@ -70,8 +72,8 @@ private
         output.output_l(max)
       end
     else
-      output.transpose.each do |data|
-        data.each do |name|
+      outputs.transpose.each do |output|
+        output.each do |name|
           print format("%-#{maxsize + 3}s", name)
         end
         puts
