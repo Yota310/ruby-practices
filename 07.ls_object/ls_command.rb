@@ -35,7 +35,6 @@ class LsCommand
     files = []
     if @params[:a]
       Dir.glob('./.*').each do |path|
-        path.split
         files.push(path[2..])
       end
     end
@@ -43,7 +42,6 @@ class LsCommand
       if File.file?(path)
         files.push(File.basename(path))
       else
-        path.split
         files.push(path[2..])
       end
     end
