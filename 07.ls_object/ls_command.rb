@@ -50,7 +50,7 @@ class LsCommand
     files
   end
 
-  def cul_maxsize
+  def culc_maxsize
     @files.max_by(&:length).length
   end
 
