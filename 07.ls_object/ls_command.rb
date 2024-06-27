@@ -10,8 +10,7 @@ class LsCommand
 
   def initialize(argv)
     @params = get_params(argv)
-    files = input_files
-    @files = @params[:r] ? files.reverse : files
+    @files = input_files
   end
 
   def run
@@ -48,7 +47,7 @@ class LsCommand
         files.push(path[2..])
       end
     end
-    files
+    @params[:r] ? files.reverse : files
   end
 
   def culc_maxsize
