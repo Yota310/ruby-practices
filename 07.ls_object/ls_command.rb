@@ -15,12 +15,11 @@ class LsCommand
   end
 
   def run
-    output_files = setup_output_files
-    maxsize = culc_maxsize
-    #ここで分岐
     if @params[:l]
       output_files_details
     else
+      output_files = setup_output_files
+      maxsize = culc_maxsize
       output_files_names(output_files, maxsize)
     end
   end
