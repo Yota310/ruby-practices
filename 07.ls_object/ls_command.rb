@@ -17,7 +17,12 @@ class LsCommand
   def run
     output_files = setup_output_files
     maxsize = culc_maxsize
-    output_files(output_files, maxsize)
+    #ここで分岐
+    if @params[:l]
+      output_files_details
+    else
+      output_files_names(output_files, maxsize)
+    end
   end
 
   private
@@ -59,23 +64,21 @@ class LsCommand
     outputs.map! { |output| output.values_at(0...row) }
     outputs
   end
-
-  def output_files(output_files, maxsize)
-    if @params[:l]
-      total = @files.map { |file| File.stat(file).blocks }.sum
-      max = @files.map { |file| File.stat(file).size.to_s.length }.max
-      puts "total #{total}"
-      @files.each do |file|
-        file_info = FileInfo.new(file)
-        file_info.output_l(max)
+  def output_files_details
+    total = @files.map { |file| File.stat(file).blocks }.sum
+    max = @files.map { |file| File.stat(file).size.to_s.length }.max
+    puts "total #{total}"
+    @files.each do |file|
+      file_info = FileInfo.new(file)
+      file_info.output_l(max)
+    end
+  end
+  def output_files_names(output_files, maxsize)
+    output_files.transpose.each do |output_file|
+      output_file.each do |file|
+        print format("%-#{maxsize + 3}s", file)
       end
-    else
-      output_files.transpose.each do |output_file|
-        output_file.each do |file|
-          print format("%-#{maxsize + 3}s", file)
-        end
-        puts
-      end
+      puts
     end
   end
 end
