@@ -18,9 +18,7 @@ class LsCommand
     if @params[:l]
       output_files_details
     else
-      output_files = setup_output_files
-      maxsize = culc_maxsize
-      output_files_names(output_files, maxsize)
+      output_files_names
     end
   end
 
@@ -74,7 +72,9 @@ class LsCommand
     end
   end
 
-  def output_files_names(output_files, maxsize)
+  def output_files_names
+    output_files = setup_output_files
+    maxsize = culc_maxsize
     output_files.transpose.each do |output_file|
       output_file.each do |file|
         print format("%-#{maxsize + 3}s", file)
