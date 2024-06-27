@@ -63,6 +63,7 @@ class LsCommand
     outputs.map! { |output| output.values_at(0...row) }
     outputs
   end
+
   def output_files_details
     total = @files.map { |file| File.stat(file).blocks }.sum
     max = @files.map { |file| File.stat(file).size.to_s.length }.max
@@ -72,6 +73,7 @@ class LsCommand
       file_info.output_l(max)
     end
   end
+
   def output_files_names(output_files, maxsize)
     output_files.transpose.each do |output_file|
       output_file.each do |file|
