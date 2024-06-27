@@ -11,7 +11,7 @@ class LsCommand
   def initialize(argv)
     @params = get_params(argv)
     files = input_files
-    @files = @params[:r].present? ? files.reverse : files
+    @files = @params[:r] ? files.reverse : files
   end
 
   def run
